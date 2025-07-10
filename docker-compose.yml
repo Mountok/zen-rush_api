@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: zenrush
+      POSTGRES_USER: zenrush
+      POSTGRES_PASSWORD: zenrush
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  backend:
+    build: .
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: zenrush
+      DB_PASSWORD: zenrush
+      DB_NAME: zenrush
+      JWT_SECRET: supersecretkey
+    ports:
+      - "8080:8080"
+    restart: always
+volumes:
+  db_data: 

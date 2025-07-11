@@ -25,6 +25,9 @@ func ListFavorites(c *gin.Context) {
 	if len(activityIDs) > 0 {
 		db.DB.Where("id IN ?", activityIDs).Find(&activities)
 	}
+	if activities == nil {
+		activities = []models.Activity{}
+	}
 	c.JSON(http.StatusOK, activities)
 }
 

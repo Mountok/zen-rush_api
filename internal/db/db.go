@@ -92,6 +92,12 @@ func autoMigrate() error {
 			activity_id INT REFERENCES activities(id),
 			viewed_at TIMESTAMP DEFAULT NOW()
 		)`,
+		`CREATE TABLE IF NOT EXISTS histories (
+			id SERIAL PRIMARY KEY,
+			user_id INT REFERENCES users(id),
+			activity_id INT REFERENCES activities(id),
+			viewed_at TIMESTAMP DEFAULT NOW()
+		)`,
 		`CREATE TABLE IF NOT EXISTS mood_stats (
 			id SERIAL PRIMARY KEY,
 			user_id INT NOT NULL REFERENCES users(id),

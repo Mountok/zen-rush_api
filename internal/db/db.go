@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/driver/postgres"
@@ -90,6 +91,13 @@ func autoMigrate() error {
 			user_id INT REFERENCES users(id),
 			activity_id INT REFERENCES activities(id),
 			viewed_at TIMESTAMP DEFAULT NOW()
+		)`,
+		`CREATE TABLE IF NOT EXISTS mood_stats (
+			id SERIAL PRIMARY KEY,
+			user_id INT NOT NULL REFERENCES users(id),
+			date DATE NOT NULL,
+			mood VARCHAR(64) NOT NULL,
+			UNIQUE (user_id, date)
 		)`,
 	}
 
@@ -308,6 +316,17 @@ func seedInitialData() error {
 		log.Printf("Создано %d активностей", len(queries))
 	} else {
 		log.Printf("Активности уже существуют (%d штук)", activityCount)
+	}
+
+	// --- Сидим статистику настроения для admin (user_id=1) на 7 дней ---
+	var adminID int
+	if err := DB.Raw("SELECT id FROM users WHERE username = 'admin'").Scan(&adminID).Error; err == nil && adminID > 0 {
+		moods := []string{"Весело", "Грустно", "Спокойно", "Вдохновенно", "Нейтрально", "Активно", "Расслабленно"}
+		today := time.Now().Truncate(24 * time.Hour)
+		for i, mood := range moods {
+			date := today.AddDate(0, 0, -i)
+			DB.Exec(`INSERT INTO mood_stats (user_id, date, mood) VALUES (?, ?, ?) ON CONFLICT (user_id, date) DO UPDATE SET mood = EXCLUDED.mood`, adminID, date, mood)
+		}
 	}
 
 	log.Println("Начальные данные созданы успешно")

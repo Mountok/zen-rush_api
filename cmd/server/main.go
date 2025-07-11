@@ -50,6 +50,10 @@ func main() {
 		history.Use(middleware.JWTAuth())
 		history.GET("", handlers.ListHistory)
 		history.POST(":activity_id", handlers.AddHistory)
+
+		// --- Mood stats ---
+		api.POST("/mood-stats", middleware.JWTAuth(), handlers.SaveOrUpdateMoodStat)
+		api.GET("/users/me/mood-stats", middleware.JWTAuth(), handlers.GetMoodStats)
 	}
 
 	port := os.Getenv("PORT")

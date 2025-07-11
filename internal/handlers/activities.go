@@ -3,11 +3,13 @@ package handlers
 import (
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/zenrush/backend/internal/db"
 	"github.com/zenrush/backend/internal/models"
 	"github.com/zenrush/backend/internal/utils"
+	"gorm.io/gorm/clause"
 )
 
 // Получить список всех активностей (с фильтрами)
@@ -32,6 +34,19 @@ func ListActivities(c *gin.Context) {
 	}
 	if mood := c.Query("mood"); mood != "" {
 		q = q.Where("? = ANY(moods)", mood)
+		// --- Сохраняем настроение пользователя в статистику ---
+		userID, exists := c.Get("user_id")
+		if exists {
+			// Upsert в mood_stats
+			db.DB.Clauses(clause.OnConflict{
+				Columns:   []clause.Column{{Name: "user_id"}, {Name: "date"}},
+				DoUpdates: clause.AssignmentColumns([]string{"mood"}),
+			}).Create(&models.MoodStat{
+				UserID: userID.(uint),
+				Date:   time.Now().Truncate(24 * time.Hour),
+				Mood:   mood,
+			})
+		}
 	}
 	if weather := c.Query("weather"); weather != "" {
 		q = q.Where("weather = ?", weather)

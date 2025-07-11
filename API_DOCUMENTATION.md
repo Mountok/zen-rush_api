@@ -75,6 +75,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 - `time` (int) - время в часах
 - `mood` (string) - настроение (например: "Весело")
 - `weather` (string) - погода ("sunny", "cloudy", "rainy", "any")
+- `people_count` (int) - количество людей (1, 2, 3, 4, 5+)
 
 **Ответ:**
 ```json
@@ -86,6 +87,7 @@ curl -X POST http://localhost:8080/api/auth/login \
     "budget": 0,
     "time": 2,
     "weather": "sunny",
+    "people_count": 1,
     "moods": ["Нейтрально", "Хорошо", "Весело"],
     "created_at": "2025-07-10T21:00:00Z"
   }
@@ -114,6 +116,7 @@ curl -H "Authorization: Bearer <JWT>" \
   "budget": 0,
   "time": 2,
   "weather": "sunny",
+  "people_count": 1,
   "moods": ["Нейтрально", "Хорошо", "Весело"],
   "created_at": "2025-07-10T21:00:00Z"
 }
@@ -130,6 +133,7 @@ curl -H "Authorization: Bearer <JWT>" \
   "budget": 0,
   "time": 2,
   "weather": "sunny",
+  "people_count": 2,
   "moods": ["string"]
 }
 ```
@@ -174,6 +178,7 @@ curl -H "Authorization: Bearer <JWT>" \
     "budget": 0,
     "time": 2,
     "weather": "sunny",
+    "people_count": 1,
     "moods": ["Нейтрально", "Хорошо", "Весело"],
     "created_at": "2025-07-10T21:00:00Z"
   }
@@ -211,6 +216,7 @@ curl -H "Authorization: Bearer <JWT>" \
     "budget": 0,
     "time": 2,
     "weather": "sunny",
+    "people_count": 1,
     "moods": ["Нейтрально", "Хорошо", "Весело"],
     "created_at": "2025-07-10T21:00:00Z"
   }
@@ -247,6 +253,7 @@ curl -H "Authorization: Bearer <JWT>" \
   "budget": 0,
   "time": 2,
   "weather": "sunny|cloudy|rainy|any",
+  "people_count": 1,
   "moods": ["string"],
   "created_at": "2025-07-10T21:00:00Z"
 }

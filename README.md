@@ -79,8 +79,9 @@ Authorization: Bearer <ваш_JWT_токен>
 - `min_budget` — минимальный бюджет
 - `max_budget` — максимальный бюджет
 - `time` — время (часы)
-- `mood` — настроение (например: Весело)
+- `mood` — настроение (например: Весело)g
 - `weather` — погода (sunny/cloudy/rainy)
+- `people_count` — количество людей (1, 2, 3, 4, 5+)
 
 **Пример:**
 ```
@@ -101,6 +102,7 @@ curl -H "Authorization: Bearer <JWT>" "http://localhost:8080/api/activities?min_
   "budget": 0,
   "time": 2,
   "weather": "sunny",
+  "people_count": 2,
   "moods": ["Нейтрально", "Хорошо"]
 }
 ```

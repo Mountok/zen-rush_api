@@ -14,6 +14,7 @@ type Activity struct {
 	Budget      int            `json:"budget"`
 	Time        int            `json:"time"` // Сколько времени займёт (в часах)
 	Weather     string         `gorm:"size:16" json:"weather"`
+	PeopleCount int            `json:"people_count"` // Количество людей (1, 2, 3, 4, 5+)
 	Moods       pq.StringArray `gorm:"type:varchar(64)[]" json:"moods"`
 	CreatedAt   time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	DeletedAt   gorm.DeletedAt `gorm:"index" json:"-"`

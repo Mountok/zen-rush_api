@@ -36,6 +36,11 @@ func ListActivities(c *gin.Context) {
 	if weather := c.Query("weather"); weather != "" {
 		q = q.Where("weather = ?", weather)
 	}
+	if peopleCount := c.Query("people_count"); peopleCount != "" {
+		if v, err := strconv.Atoi(peopleCount); err == nil {
+			q = q.Where("people_count = ?", v)
+		}
+	}
 
 	if err := q.Find(&activities).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "db error"})
@@ -95,6 +100,7 @@ func UpdateActivity(c *gin.Context) {
 	activity.Budget = req.Budget
 	activity.Time = req.Time
 	activity.Weather = req.Weather
+	activity.PeopleCount = req.PeopleCount
 	activity.Moods = req.Moods
 	if err := db.DB.Save(&activity).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "db error"})
